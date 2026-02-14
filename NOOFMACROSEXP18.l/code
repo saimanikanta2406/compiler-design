@@ -1,0 +1,27 @@
+%{
+#include <stdio.h>
+int macro_count = 0;
+int header_count = 0;
+%}
+
+%%
+^[ \t]*"#"[ \t]*define        { macro_count++; }
+^[ \t]*"#"[ \t]*include       { header_count++; }
+.|\n                          { /* Ignore other content */ }
+%%
+
+int main()
+{
+    printf("Enter a C program (Press Ctrl+D to stop):\n");
+    yylex();
+
+    printf("\nNumber of Macros Defined   : %d\n", macro_count);
+    printf("Number of Header Files Included : %d\n", header_count);
+
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
